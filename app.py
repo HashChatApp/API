@@ -18,6 +18,11 @@ twitterService = TwitterService(consumer_key=os.environ['consumer_key'],
     access_token=os.environ['access_token'],
     access_token_secret=os.environ['access_token_secret'])
 
+class TwitterAuth(Resource):
+    def get(self):
+        data = {'request_url': twitterService.get_authorization_url()}
+        return Response(json.dumps(data), status=200, mimetype='application/json')
+
 class Trend(Resource):
     def get(self):
         parser = reqparse.RequestParser()
@@ -32,11 +37,12 @@ class User(Resource):
     def get(self):
         return Response(json.dumps(data), status=200, mimetype='application/json')
 
-    def post(self):
+    def put(self):
         return ""
 
 api.add_resource(User, '/users')
 api.add_resource(Trend, '/trends')
+api.add_resource(TwitterAuth, '/twitterauth')
 
 if __name__ == '__main__':
 	app.run(debug=True)
